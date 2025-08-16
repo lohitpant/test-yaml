@@ -1,0 +1,34 @@
+name: My Basic Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      hello:
+        description: "Name of the Author"
+        default: "Lohit"
+        required: true
+        type: string
+      city:
+        description: "City of the Author"
+        default: "Delhi"
+        required: true
+        type: choice
+        options:
+          - "Delhi"
+          - "Mumbai"
+          - "Dehradun"
+      fav-color-blue:
+        description: "Is your favorite color blue??"
+        default: true
+        type: boolean
+
+jobs:
+  namastey:
+    name: "Namastey, Program!"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Say Namastey
+        run: |
+          echo "Hello ${{ github.event.inputs.hello }}"
+          echo "My fav city is ${{ github.event.inputs.city}}"
+          echo "${{ github.event.inputs.fav-color-blue }} is my fav color."
