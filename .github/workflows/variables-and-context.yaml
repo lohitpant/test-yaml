@@ -20,8 +20,10 @@ jobs:
 
   job2:
     runs-on: ubuntu-latest
-    output1: ${{steps.step1.outputs.step1value}}
-    output2: ${{steps.step1.outputs.step2value}}
+    outputs:
+      output1: ${{steps.step1.outputs.step1value}}
+      output2: ${{steps.step1.outputs.step2value}}
+
     steps:
       - name: Step 1
         id: step1
