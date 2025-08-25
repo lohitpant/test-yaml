@@ -8,6 +8,11 @@ on:
         default: "La La Land"
         required: true
 
+env:
+  VAR1: myworkflowvar1
+  VAR2: myworkflowvar2
+  VAR3: myworkflowvar3
+
 jobs:
   job1:
     runs-on: ubuntu-latest
@@ -37,4 +42,19 @@ jobs:
     needs: job2
     steps:
       - name: Output
-        run: echo ${{needs.job2.outputs.output1}} || ${{needs.job2.outputs.output2}}
+        run: echo ${{needs.job2.outputs.output1}} ${{needs.job2.outputs.output2}}
+
+  job4:
+    runs-on: ubuntu-latest
+    env:
+      VAR2: myjobvar2
+      VAR3: myjobvar3
+    steps:
+      - run: |
+          echo $VAR1
+          echo ${{env.VAR1}}
+          echo " "
+          echo $VAR2
+          echo $VAR3
+        env:
+          VAR3: mystepvar3
