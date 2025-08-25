@@ -10,6 +10,7 @@ on:
 
 jobs:
   job1:
+    name: "Output GITHUB_CONTEXT"
     runs-on: ubutu-latest
     steps:
       - name: Dump Github Context
