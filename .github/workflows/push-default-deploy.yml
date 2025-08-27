@@ -1,0 +1,48 @@
+name: Push Default and Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build-and-test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup .Net Core
+        uses: actions/setup-dotnet@v4.1.0
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Restore Dependencies
+        run: dotnet restore "${{github.workspace}}/src/my-web-app.sln"
+
+      - name: Build
+        run: dotnet build "${{github.workspace}}/src/my-web-app.sln" --no-restore --configuration Release
+
+      - name: Test
+        run: dotnet test "${{github.workspace}}/src/my-web-app.sln" --no-restore --logger:"junit;LogFilePath=${{ github.workspace }}/results/test-results.xml"
+
+      - name: Create Test Sumary
+        uses: test-summary@v2.4
+        with:
+          paths: ${{github.workspace}}/results/*.xml
+          output: ${{github.workspace}}/results/summary.md
+          show: "all"
+        if: always()
+
+      - name: Add Test Results To Job Summary
+        run: |
+          echo "TEST RESULTS:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY # this is a blank line
+          cat "${{ github.workspace }}/results/summary.md" >> $GITHUB_STEP_SUMMARY
+        if: always()
