@@ -1,0 +1,27 @@
+name: PR - Build/Test - Composite Action
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Before Composite action
+        run: |
+          echo "Hello from before the composite step"
+
+      - name: Build and Publish .NET Core App
+        uses: lohitpant/my-custom-gha-action@main
+        with:
+          dotnet-version: "8.0.x"
+          project-path: ${{github.workspace}}/src/my-web-app-my-web-app.csproj
+          output-path: "mywebapp"
+
+      - name: Before Composite action
+        run: |
+          echo "Hello from after the composite step"
