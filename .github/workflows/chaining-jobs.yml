@@ -8,6 +8,10 @@ on:
         required: true
         type: boolean
 
+concurrency:
+  group: my-test-${{github.ref}}
+  cancel-in-progress: true
+
 jobs:
   job1:
     name: "Job 1"
