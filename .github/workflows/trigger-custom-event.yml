@@ -1,0 +1,21 @@
+name: Trigger a Custom Event
+
+on:
+  repository_dispatch:
+    types: [on-demand-test-event]
+
+jobs:
+  get-info-from-event:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Dump Github Context
+        env:
+          GITHUB_CONTEXT: ${{toJson(github)}}
+        run: echo $GITHUB_CONTEXT
+
+      - name: Show Values
+        run: |
+          echo "value1: ${{github.event.client_payload.value1}}"
+          echo "value2: ${{github.event.client_payload.value2}}"
+          echo "value3: ${{github.event.client_payload.value3}}"
